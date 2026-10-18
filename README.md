@@ -11,6 +11,25 @@ OBSERVED → CORRELATED → HYPOTHESIS → VALIDATED
                                  ↘ UNKNOWN — HUMAN REVIEW REQUIRED
 ```
 
+<!-- X4-APEX-DIAGRAM-START:x4-evidence -->
+
+```mermaid
+flowchart TD
+    CLAIM[Claim or Result] --> COLLECT[Collect Source-linked Evidence]
+    COLLECT --> META[Timestamp, Source, Verifier, Hash]
+    META --> CHECK[Deterministic Validation Rules]
+    CHECK -->|insufficient evidence| UNKNOWN[UNKNOWN - HUMAN REVIEW REQUIRED]
+    CHECK -->|corroborated and valid| VALID[VALIDATED]
+    CHECK -->|signals disagree| CORRELATED[CORRELATED or HYPOTHESIS]
+    VALID --> LEDGER[Evidence Ledger]
+    UNKNOWN --> LEDGER
+    CORRELATED --> LEDGER
+    LEDGER --> CONSUMER[Gate or Report Consumer]
+    CONSUMER -. never trust label alone .-> CHECK
+```
+
+<!-- X4-APEX-DIAGRAM-END:x4-evidence -->
+
 ## Core API
 
 ```python
