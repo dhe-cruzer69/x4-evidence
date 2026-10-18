@@ -65,5 +65,20 @@ Apache-2.0
 
 > Status: architecture documentation; implementation and deployment claims require independent verification.
 
+```mermaid
+flowchart LR
+  Event[Canonical event bytes] --> Canonical[Canonicalize serialization]
+  Canonical --> Prev[Read previous chain hash]
+  Prev --> Hash[Compute hash of previous hash + event]
+  Hash --> Append[(Append-only evidence log)]
+  Append --> Verify[Independent verifier]
+  Verify --> Recompute[Recompute hashes from stored bytes]
+  Recompute --> Match{Hashes and sequence match?}
+  Match -->|no| Tamper[Report tamper / gap]
+  Match -->|yes| Receipt[Emit verification receipt]
+  Receipt --> Consumer[Evidence consumer]
+  Tamper --> Alert[Flag for investigation]
+```
+
 **Evidence note:** A hash chain detects changes only under its stated storage and threat model; it does not by itself prove event truth, identity, or external immutability.
 
